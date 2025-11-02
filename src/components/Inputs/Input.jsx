@@ -20,7 +20,7 @@ function Input({value,onChange,placeholder, label,type}) {
                 {type==="password" && (  
                     <>
                         {showPassword ? (
-                            <FaRegEyeRegEye
+                            <FaRegEye
                                 size={22}
                                 className='text-primary cursor-pointer'
                                 onClick={()=>toggleShowPassword()}
