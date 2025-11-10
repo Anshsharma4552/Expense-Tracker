@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { LuTrendingUpDown, LuUser, LuDollarSign, LuCreditCard, LuLogOut } from 'react-icons/lu';
+import { LuTrendingUpDown, LuUser, LuDollarSign, LuCreditCard, LuLogOut, LuMenu, LuX } from 'react-icons/lu';
 import ProfileModal from '../ProfileModal';
 
 function DashboardLayout({ children }) {
@@ -10,6 +10,7 @@ function DashboardLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -26,15 +27,33 @@ function DashboardLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50">
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <div className="fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-40">
-        <div className="p-6">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
-              <LuTrendingUpDown className="text-white text-lg" />
+      <div className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+        sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+      } lg:translate-x-0`}>
+        <div className="p-4 lg:p-6">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+                <LuTrendingUpDown className="text-white text-lg" />
+              </div>
+              <h1 className="text-lg lg:text-xl font-semibold text-gray-900">Expense Tracker</h1>
             </div>
-            <h1 className="text-xl font-semibold text-gray-900">Expense Tracker</h1>
+            <button
+              onClick={() => setSidebarOpen(false)}
+              className="lg:hidden p-2 rounded-md hover:bg-gray-100"
+            >
+              <LuX className="w-5 h-5" />
+            </button>
           </div>
         </div>
         <nav className="mt-6">
@@ -45,7 +64,8 @@ function DashboardLayout({ children }) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center space-x-3 px-6 py-3 text-sm font-medium transition-colors ${
+                onClick={() => setSidebarOpen(false)}
+                className={`flex items-center space-x-3 px-4 lg:px-6 py-3 text-sm font-medium transition-colors ${
                   isActive 
                     ? 'bg-purple-50 text-purple-600 border-r-2 border-purple-600' 
                     : 'text-gray-600 hover:text-purple-600 hover:bg-gray-50'
@@ -57,7 +77,7 @@ function DashboardLayout({ children }) {
             );
           })}
         </nav>
-        <div className="absolute bottom-0 left-0 right-0 p-6 border-t border-gray-200">
+        <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 border-t border-gray-200">
           <button
             onClick={handleLogout}
             className="flex items-center space-x-3 w-full px-4 py-3 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
@@ -69,11 +89,19 @@ function DashboardLayout({ children }) {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 ml-64">
+      <div className="lg:ml-64">
         <header className="bg-white shadow-sm border-b">
-          <div className="px-6 py-4">
+          <div className="px-4 lg:px-6 py-4">
             <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-bold text-gray-900">Dashboard</h2>
+              <div className="flex items-center space-x-3">
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="lg:hidden p-2 rounded-md hover:bg-gray-100"
+                >
+                  <LuMenu className="w-6 h-6" />
+                </button>
+                <h2 className="text-xl lg:text-2xl font-bold text-gray-900">Dashboard</h2>
+              </div>
               <button
                 onClick={() => setShowProfileModal(true)}
                 className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-50 transition-colors"
@@ -82,10 +110,10 @@ function DashboardLayout({ children }) {
                   <img 
                     src={user.profileImageUrl} 
                     alt="Profile" 
-                    className="w-10 h-10 rounded-full object-cover border-2 border-gray-200"
+                    className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-gray-200"
                   />
                 ) : (
-                  <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                  <div className="w-8 h-8 lg:w-10 lg:h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm lg:text-lg">
                     {user?.fullName?.charAt(0)?.toUpperCase()}
                   </div>
                 )}
@@ -93,7 +121,7 @@ function DashboardLayout({ children }) {
             </div>
           </div>
         </header>
-        <main className="p-6">
+        <main className="p-4 lg:p-6">
           {children}
         </main>
       </div>
