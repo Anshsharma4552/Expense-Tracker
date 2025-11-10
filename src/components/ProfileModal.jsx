@@ -1,11 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LuUser, LuMail, LuCamera, LuSettings } from 'react-icons/lu';
+import { LuUser, LuMail, LuCamera, LuSettings, LuLogOut } from 'react-icons/lu';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 function ProfileModal({ isOpen, onClose, user }) {
-  const { uploadImage, updateProfile } = useAuth();
+  const { uploadImage, updateProfile, logout } = useAuth();
+  const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -246,6 +248,22 @@ function ProfileModal({ isOpen, onClose, user }) {
               <div>
                 <p className="font-medium text-gray-900">Help & Support</p>
                 <p className="text-sm text-gray-500">Get help and contact support</p>
+              </div>
+            </button>
+            
+            <button 
+              onClick={() => {
+                logout();
+                toast.success('Logged out successfully');
+                navigate('/login');
+                onClose();
+              }}
+              className="w-full flex items-center space-x-3 p-3 text-left hover:bg-red-50 rounded-lg transition-colors text-red-600"
+            >
+              <LuLogOut className="w-5 h-5" />
+              <div>
+                <p className="font-medium">Sign Out</p>
+                <p className="text-sm text-red-500">Sign out of your account</p>
               </div>
             </button>
           </div>
