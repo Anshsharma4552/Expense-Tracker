@@ -4,16 +4,77 @@ import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper';
 import ProfilePhotoSelector from '../../components/Inputs/ProfilePhotoSelector';
+import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
+
 function SignUp() {
   const [profilePic,setProfilePic]=useState(null);
   const [fullName,setFullName]=useState("");
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const [error,setError]=useState(null);
-  // const navigate=useNavigate();
+  const [loading,setLoading]=useState(false);
+  const navigate=useNavigate();
+  const { register, uploadImage } = useAuth();
 
   //Handle SignUp Form submit
   const handleSignUp=async(e)=>{
+    e.preventDefault()
+    
+    if(!fullName){
+      setError("Please enter your name")
+      return
+    }
+    if(!validateEmail(email)){
+      setError("Please enter a valid email address")
+      return
+    }
+    if(!password){ 
+      setError("Please enter the password")
+      return
+    }
+    if(password.length < 6){
+      setError("Password must be at least 6 characters")
+      return
+    }
+    
+    setError("")
+    setLoading(true)
+    
+    try {
+      let profileImageUrl = "";
+      
+      // Upload profile image if selected
+      if (profilePic) {
+        const uploadResult = await uploadImage(profilePic);
+        if (uploadResult.success) {
+          profileImageUrl = uploadResult.imageUrl;
+        } else {
+          toast.error('Failed to upload profile image');
+        }
+      }
+      
+      // Register user
+      const result = await register({
+        fullName,
+        email,
+        password,
+        profileImageUrl
+      });
+      
+      if (result.success) {
+        toast.success('Account created successfully!');
+        navigate('/dashboard');
+      } else {
+        setError(result.message);
+        toast.error(result.message);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+      toast.error('An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <AuthLayout>
@@ -50,7 +111,9 @@ function SignUp() {
               </div>
           </div>
             {error && <p className="text-red-500 text-xs pb-5">{error}</p>}
-            <button type="submit" className='btn-primary'>SIGN UP</button>
+            <button type="submit" className='btn-primary' disabled={loading}>
+              {loading ? 'CREATING ACCOUNT...' : 'SIGN UP'}
+            </button>
             <p className='text-[13px] text-slate-800 mt-3'>
             Already have an account?
             <Link to="/login" className='font-medium text-primary underline'>Login

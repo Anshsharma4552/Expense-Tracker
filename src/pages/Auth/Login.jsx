@@ -3,11 +3,16 @@ import AuthLayout from '../../components/layouts/AuthLayout'
 import { Link, useNavigate } from 'react-router-dom';
 import Input from '../../components/Inputs/Input';
 import { validateEmail } from '../../utils/helper';
+import { useAuth } from '../../context/AuthContext';
+import toast from 'react-hot-toast';
+
 function Login() {
   const [email,setEmail]=useState("");
   const [password,setPassword]=useState("");
   const [error,setError]=useState("");
-  // const navigate=useNavigateseNavigate();
+  const [loading,setLoading]=useState(false);
+  const navigate=useNavigate();
+  const { login } = useAuth();
 
   //Handle Login Form submit
   const handleLogin=async(e)=>{
@@ -17,12 +22,28 @@ function Login() {
       return;
     }
     if(!password){
-      setError("Password enter the password");
+      setError("Please enter the password");
       return;
     }
+    
     setError("");
-    // Proceed with login logic (e.g., API call)
-    // navigate('/dashboard');
+    setLoading(true);
+    
+    try {
+      const result = await login(email, password);
+      if (result.success) {
+        toast.success('Login successful!');
+        navigate('/dashboard');
+      } else {
+        setError(result.message);
+        toast.error(result.message);
+      }
+    } catch (err) {
+      setError('An unexpected error occurred');
+      toast.error('An unexpected error occurred');
+    } finally {
+      setLoading(false);
+    }
   }
   return (
     <AuthLayout>
@@ -47,7 +68,9 @@ function Login() {
                 type="password"
               />
               {error && <p className="text-red-500 text-xs pb-5">{error}</p>}
-              <button type="submit" className='btn-primary'>LOGIN</button>
+              <button type="submit" className='btn-primary' disabled={loading}>
+                {loading ? 'LOGGING IN...' : 'LOGIN'}
+              </button>
               <p className='text-[13px] text-slate-800 mt-3'>
                 Don't have an account? 
                 <Link to="/signUp" className='font-medium text-primary underline'>Sign Up 

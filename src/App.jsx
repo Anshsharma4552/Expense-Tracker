@@ -5,38 +5,58 @@ import {
   Route,
   Navigate,
 } from "react-router-dom"; 
+import { AuthProvider, useAuth } from './context/AuthContext';
 import SignUp from './pages/Auth/SignUp';
 import Home from './pages/Dashboard/Home';
 import Login from './pages/Auth/Login';
 import Income from './pages/Dashboard/Income';
 import Expense from './pages/Dashboard/Expense';
+import Inventory from './pages/Dashboard/Inventory';
+import Reports from './pages/Dashboard/Reports';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
   return (
-    <div>
+    <AuthProvider>
       <Router>
         <Routes>
           <Route path="/" element={<Root />} />
-          <Route path="/login" exact element={<Login />} />
-          <Route path="/signUp" exact element={<SignUp />} />
-          <Route path="/dashboard" exact element={<Home />} />
-          <Route path="/income" exact element={<Income />} />
-          <Route path="/expense" exact element={<Expense />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signUp" element={<SignUp />} />
+          <Route path="/dashboard" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/income" element={<ProtectedRoute><Income /></ProtectedRoute>} />
+          <Route path="/expense" element={<ProtectedRoute><Expense /></ProtectedRoute>} />
+          <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
+          <Route path="/reports" element={<ProtectedRoute><Reports /></ProtectedRoute>} />
         </Routes>
+        <Toaster position="top-right" />
       </Router>
-    </div>
+    </AuthProvider>
   )
 }
 
-export default App
 const Root = () => {
-  // check if token is present in local storage
-  const isAuthenticated = !!localStorage.getItem("token");
+  const { isAuthenticated, loading } = useAuth();
   
-  // redirect to dashboard if authenticated else to login
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+  
   return isAuthenticated ? (
-    <Navigate to="/dashboard" />
+    <Navigate to="/dashboard" replace />
   ) : (
-    <Navigate to="/login" />
+    <Navigate to="/login" replace />
   );
 };
+
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, loading } = useAuth();
+  
+  if (loading) {
+    return <div className="flex items-center justify-center min-h-screen">Loading...</div>;
+  }
+  
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
+};
+
+export default App
