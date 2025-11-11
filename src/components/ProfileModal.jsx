@@ -1,17 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LuUser, LuMail, LuCamera, LuSettings, LuLogOut } from 'react-icons/lu';
+import { LuUser, LuMail, LuCamera, LuSettings, LuLogOut, LuUsers, LuPlus, LuTrash2 } from 'react-icons/lu';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import AddAccountModal from './AddAccountModal';
 import api from '../utils/api';
 import toast from 'react-hot-toast';
 
 function ProfileModal({ isOpen, onClose, user }) {
-  const { uploadImage, updateProfile, logout } = useAuth();
+  const { uploadImage, updateProfile, logout, switchAccount, removeAccount, accounts, currentAccountId } = useAuth();
   const navigate = useNavigate();
   const [uploading, setUploading] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [saving, setSaving] = useState(false);
   const [stats, setStats] = useState({ totalTransactions: 0, totalSavings: 0 });
+  const [showAddAccountModal, setShowAddAccountModal] = useState(false);
   const [formData, setFormData] = useState({
     fullName: user?.fullName || '',
     email: user?.email || ''
@@ -104,37 +106,40 @@ function ProfileModal({ isOpen, onClose, user }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl" style={{backgroundColor: '#EEEEEE'}}>
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-900">Profile Settings</h2>
+        <div className="flex justify-between items-center p-6 border-b" style={{borderColor: '#CBCBCB'}}>
+          <h2 className="text-xl font-bold" style={{color: '#777C6D'}}>Profile Settings</h2>
           <button 
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 hover:text-gray-700"
+            className="p-2 rounded-full transition-colors"
+            style={{color: '#777C6D'}}
           >
             ✕
           </button>
         </div>
         
         {/* Profile Picture Section */}
-        <div className="p-6 text-center border-b border-gray-200">
+        <div className="p-6 text-center border-b" style={{borderColor: '#CBCBCB'}}>
           <div className="relative inline-block">
             {user?.profileImageUrl ? (
               <img 
                 src={user.profileImageUrl} 
                 alt="Profile" 
-                className="w-24 h-24 rounded-full object-cover border-4 border-purple-100"
+                className="w-24 h-24 rounded-full object-cover border-4" 
+                style={{borderColor: '#B7B89F'}}
               />
             ) : (
-              <div className="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+              <div className="w-24 h-24 rounded-full flex items-center justify-center text-white text-3xl font-bold" style={{backgroundColor: '#777C6D'}}>
                 {user?.fullName?.charAt(0)?.toUpperCase()}
               </div>
             )}
             <button
               onClick={() => fileInputRef.current?.click()}
               disabled={uploading}
-              className="absolute -bottom-2 -right-2 w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white hover:bg-purple-700 transition-colors disabled:opacity-50"
+              className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full flex items-center justify-center text-white transition-colors disabled:opacity-50"
+              style={{backgroundColor: '#777C6D'}}
             >
               {uploading ? (
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -150,7 +155,7 @@ function ProfileModal({ isOpen, onClose, user }) {
               className="hidden"
             />
           </div>
-          <p className="text-sm text-gray-500 mt-2">Click camera icon to change photo</p>
+          <p className="text-sm mt-2" style={{color: '#777C6D', opacity: 0.7}}>Click camera icon to change photo</p>
         </div>
 
         {/* Profile Information */}
@@ -215,15 +220,118 @@ function ProfileModal({ isOpen, onClose, user }) {
           )}
         </div>
 
+        {/* Account Management */}
+        {accounts.length > 1 && (
+          <div className="p-6 border-t border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold text-gray-900">Switch Account</h3>
+              <span className="text-xs bg-purple-100 text-purple-600 px-2 py-1 rounded-full">
+                {accounts.length} accounts
+              </span>
+            </div>
+            <div className="space-y-2 max-h-32 overflow-y-auto">
+              {accounts.map((account) => (
+                <div key={account._id} className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
+                  currentAccountId === account._id 
+                    ? 'bg-purple-50 border-purple-200' 
+                    : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
+                }`}>
+                  <div className="flex items-center space-x-3">
+                    {account.profileImageUrl ? (
+                      <img src={account.profileImageUrl} alt="Profile" className="w-8 h-8 rounded-full object-cover" />
+                    ) : (
+                      <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                        {account.fullName?.charAt(0)?.toUpperCase()}
+                      </div>
+                    )}
+                    <div>
+                      <p className="font-medium text-gray-900 text-sm">{account.fullName}</p>
+                      <p className="text-xs text-gray-500">{account.email}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    {currentAccountId === account._id ? (
+                      <span className="text-xs text-purple-600 font-medium">Current</span>
+                    ) : (
+                      <>
+                        <button
+                          onClick={() => {
+                            switchAccount(account._id);
+                            toast.success(`Switched to ${account.fullName}`);
+                          }}
+                          className="text-xs text-purple-600 hover:text-purple-700 font-medium"
+                        >
+                          Switch
+                        </button>
+                        <button
+                          onClick={() => {
+                            removeAccount(account._id);
+                            toast.success('Account removed');
+                          }}
+                          className="text-xs text-red-500 hover:text-red-600 p-1"
+                        >
+                          <LuTrash2 className="w-3 h-3" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            <button
+              onClick={() => setShowAddAccountModal(true)}
+              className="w-full mt-3 flex items-center justify-center space-x-2 p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm"
+            >
+              <LuPlus className="w-4 h-4" />
+              <span>Add Another Account</span>
+            </button>
+          </div>
+        )}
+
+        {/* Current Account Data */}
+        <div className="p-6 border-t border-gray-200">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Account</h3>
+          <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4">
+            <div className="flex items-center space-x-3 mb-3">
+              {user?.profileImageUrl ? (
+                <img src={user.profileImageUrl} alt="Profile" className="w-10 h-10 rounded-full object-cover" />
+              ) : (
+                <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                  {user?.fullName?.charAt(0)?.toUpperCase()}
+                </div>
+              )}
+              <div>
+                <p className="font-semibold text-gray-900">{user?.fullName}</p>
+                <p className="text-sm text-gray-600">{user?.email}</p>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 text-center">
+              <div className="bg-white p-2 rounded">
+                <p className="text-lg font-bold text-purple-600">{stats.totalTransactions}</p>
+                <p className="text-xs text-gray-500">Transactions</p>
+              </div>
+              <div className="bg-white p-2 rounded">
+                <p className={`text-lg font-bold ${stats.totalSavings >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  ₹{Math.abs(stats.totalSavings).toLocaleString()}
+                </p>
+                <p className="text-xs text-gray-500">{stats.totalSavings >= 0 ? 'Savings' : 'Loss'}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Settings Options */}
         <div className="p-6 border-t border-gray-200">
           <h3 className="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
           <div className="space-y-2">
-            <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
+            <button 
+              onClick={() => setShowAddAccountModal(true)}
+              className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+            >
               <LuSettings className="w-5 h-5 text-gray-600" />
               <div>
                 <p className="font-medium text-gray-900">Account Settings</p>
-                <p className="text-sm text-gray-500">Manage your account preferences</p>
+                <p className="text-sm text-gray-500">Add or manage multiple accounts</p>
               </div>
             </button>
             
@@ -269,23 +377,13 @@ function ProfileModal({ isOpen, onClose, user }) {
           </div>
         </div>
 
-        {/* Account Stats */}
-        <div className="p-6 bg-gray-50 rounded-b-2xl">
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">Account Statistics</h3>
-          <div className="grid grid-cols-2 gap-4 text-center">
-            <div className="bg-white p-3 rounded-lg">
-              <p className="text-2xl font-bold text-purple-600">{stats.totalTransactions}</p>
-              <p className="text-xs text-gray-500">Total Transactions</p>
-            </div>
-            <div className="bg-white p-3 rounded-lg">
-              <p className={`text-2xl font-bold ${stats.totalSavings >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                ₹{Math.abs(stats.totalSavings).toLocaleString()}
-              </p>
-              <p className="text-xs text-gray-500">{stats.totalSavings >= 0 ? 'Total Savings' : 'Total Loss'}</p>
-            </div>
-          </div>
-        </div>
+
       </div>
+      
+      <AddAccountModal 
+        isOpen={showAddAccountModal} 
+        onClose={() => setShowAddAccountModal(false)} 
+      />
     </div>
   );
 }

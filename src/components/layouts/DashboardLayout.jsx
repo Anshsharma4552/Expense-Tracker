@@ -27,7 +27,7 @@ function DashboardLayout({ children }) {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen" style={{backgroundColor: '#777C6D'}}>
       {/* Mobile sidebar overlay */}
       {sidebarOpen && (
         <div 
@@ -37,20 +37,20 @@ function DashboardLayout({ children }) {
       )}
 
       {/* Sidebar */}
-      <div className={`fixed left-0 top-0 h-full w-64 bg-white shadow-lg z-50 transform transition-transform duration-300 ease-in-out ${
+      <div className={`fixed left-0 top-0 h-full w-64 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-      } lg:translate-x-0`}>
+      } lg:translate-x-0`} style={{backgroundColor: '#B7B89F'}}>
         <div className="p-4 lg:p-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{backgroundColor: '#777C6D'}}>
                 <LuTrendingUpDown className="text-white text-lg" />
               </div>
-              <h1 className="text-lg lg:text-xl font-semibold text-gray-900">Expense Tracker</h1>
+              <h1 className="text-lg lg:text-xl font-semibold" style={{color: '#EEEEEE'}}>Expense Tracker</h1>
             </div>
             <button
               onClick={() => setSidebarOpen(false)}
-              className="lg:hidden p-2 rounded-md hover:bg-gray-100"
+              className="lg:hidden p-2 rounded-md hover:bg-gray-700 text-gray-300"
             >
               <LuX className="w-5 h-5" />
             </button>
@@ -67,9 +67,10 @@ function DashboardLayout({ children }) {
                 onClick={() => setSidebarOpen(false)}
                 className={`flex items-center space-x-3 px-4 lg:px-6 py-3 text-sm font-medium transition-colors ${
                   isActive 
-                    ? 'bg-purple-50 text-purple-600 border-r-2 border-purple-600' 
-                    : 'text-gray-600 hover:text-purple-600 hover:bg-gray-50'
+                    ? 'border-r-2' 
+                    : ''
                 }`}
+                style={isActive ? {backgroundColor: '#777C6D', borderRightColor: '#EEEEEE', color: '#EEEEEE'} : {color: '#777C6D'}}
               >
                 <Icon className="w-5 h-5" />
                 <span>{item.label}</span>
@@ -77,10 +78,10 @@ function DashboardLayout({ children }) {
             );
           })}
         </nav>
-        <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 border-t border-gray-200">
+        <div className="absolute bottom-0 left-0 right-0 p-4 lg:p-6 border-t border-gray-700">
           <button
             onClick={handleLogout}
-            className="flex items-center space-x-3 w-full px-4 py-3 text-sm font-medium text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-colors"
+            className="flex items-center space-x-3 w-full px-4 py-3 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-900/20 rounded-lg transition-colors"
           >
             <LuLogOut className="w-5 h-5" />
             <span>Sign Out</span>
@@ -90,30 +91,30 @@ function DashboardLayout({ children }) {
 
       {/* Main Content */}
       <div className="lg:ml-64">
-        <header className="bg-white shadow-sm border-b">
+        <header className="shadow-sm border-b" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
           <div className="px-4 lg:px-6 py-4">
             <div className="flex justify-between items-center">
               <div className="flex items-center space-x-3">
                 <button
                   onClick={() => setSidebarOpen(true)}
-                  className="lg:hidden p-2 rounded-md hover:bg-gray-100"
+                  className="lg:hidden p-2 rounded-md hover:bg-gray-700 text-gray-300"
                 >
                   <LuMenu className="w-6 h-6" />
                 </button>
-                <h2 className="text-xl lg:text-2xl font-bold text-gray-900">Dashboard</h2>
+                <h2 className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>Dashboard</h2>
               </div>
               <button
                 onClick={() => setShowProfileModal(true)}
-                className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-50 transition-colors"
+                className="flex items-center space-x-2 p-1 rounded-full hover:bg-gray-700 transition-colors"
               >
                 {user?.profileImageUrl ? (
                   <img 
                     src={user.profileImageUrl} 
                     alt="Profile" 
-                    className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-gray-200"
+                    className="w-8 h-8 lg:w-10 lg:h-10 rounded-full object-cover border-2 border-gray-600"
                   />
                 ) : (
-                  <div className="w-8 h-8 lg:w-10 lg:h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm lg:text-lg">
+                  <div className="w-8 h-8 lg:w-10 lg:h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm lg:text-lg">
                     {user?.fullName?.charAt(0)?.toUpperCase()}
                   </div>
                 )}

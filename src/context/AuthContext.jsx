@@ -14,13 +14,23 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [accounts, setAccounts] = useState([]);
+  const [currentAccountId, setCurrentAccountId] = useState(null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
+    const savedAccounts = localStorage.getItem('accounts');
+    const savedCurrentAccountId = localStorage.getItem('currentAccountId');
     
     if (token && userData) {
       setUser(JSON.parse(userData));
+    }
+    if (savedAccounts) {
+      setAccounts(JSON.parse(savedAccounts));
+    }
+    if (savedCurrentAccountId) {
+      setCurrentAccountId(savedCurrentAccountId);
     }
     setLoading(false);
   }, []);
@@ -33,6 +43,19 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
+      
+      // Add to accounts list if not already present
+      const existingAccounts = JSON.parse(localStorage.getItem('accounts') || '[]');
+      const accountExists = existingAccounts.find(acc => acc._id === userData._id);
+      
+      if (!accountExists) {
+        const updatedAccounts = [...existingAccounts, userData];
+        localStorage.setItem('accounts', JSON.stringify(updatedAccounts));
+        setAccounts(updatedAccounts);
+      }
+      
+      localStorage.setItem('currentAccountId', userData._id);
+      setCurrentAccountId(userData._id);
       
       return { success: true };
     } catch (error) {
@@ -64,7 +87,39 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('currentAccountId');
     setUser(null);
+    setCurrentAccountId(null);
+  };
+
+  const switchAccount = async (accountId) => {
+    try {
+      const account = accounts.find(acc => acc._id === accountId);
+      if (!account) return { success: false, message: 'Account not found' };
+      
+      // Here you would typically make an API call to get a new token for this account
+      // For now, we'll simulate switching by updating the current user
+      localStorage.setItem('user', JSON.stringify(account));
+      localStorage.setItem('currentAccountId', accountId);
+      setUser(account);
+      setCurrentAccountId(accountId);
+      
+      return { success: true };
+    } catch (error) {
+      return { success: false, message: 'Failed to switch account' };
+    }
+  };
+
+  const removeAccount = (accountId) => {
+    const updatedAccounts = accounts.filter(acc => acc._id !== accountId);
+    localStorage.setItem('accounts', JSON.stringify(updatedAccounts));
+    setAccounts(updatedAccounts);
+    
+    if (currentAccountId === accountId && updatedAccounts.length > 0) {
+      switchAccount(updatedAccounts[0]._id);
+    } else if (updatedAccounts.length === 0) {
+      logout();
+    }
   };
 
   const uploadImage = async (imageFile) => {
@@ -109,6 +164,10 @@ export const AuthProvider = ({ children }) => {
     logout,
     uploadImage,
     updateProfile,
+    switchAccount,
+    removeAccount,
+    accounts,
+    currentAccountId,
     isAuthenticated: !!user,
     loading
   };

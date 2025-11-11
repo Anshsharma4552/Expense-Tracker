@@ -236,38 +236,38 @@ function Home() {
       <div className="space-y-8">
         {/* Top Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          <div className="bg-gradient-to-br from-white to-green-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 lg:p-10 border border-green-100">
+          <div className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 lg:p-10 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm lg:text-base font-medium text-gray-600 mb-2">Total Income</p>
+                <p className="text-sm lg:text-base font-medium mb-2" style={{color: '#777C6D'}}>Total Income</p>
                 <p className="text-2xl lg:text-4xl font-bold text-green-600">₹{totalIncome.toLocaleString()}</p>
               </div>
-              <div className="w-16 h-16 lg:w-18 lg:h-18 bg-gradient-to-br from-green-400 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <LuDollarSign className="text-white text-2xl lg:text-3xl" />
+              <div className="w-16 h-16 lg:w-18 lg:h-18 rounded-2xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#B7B89F'}}>
+                <span className="text-2xl lg:text-3xl">💰</span>
               </div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-white to-red-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 lg:p-10 border border-red-100">
+          <div className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 lg:p-10 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm lg:text-base font-medium text-gray-600 mb-2">Total Expense</p>
+                <p className="text-sm lg:text-base font-medium mb-2" style={{color: '#777C6D'}}>Total Expense</p>
                 <p className="text-2xl lg:text-4xl font-bold text-red-600">₹{totalExpense.toLocaleString()}</p>
               </div>
-              <div className="w-16 h-16 lg:w-18 lg:h-18 bg-gradient-to-br from-red-400 to-red-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <LuCreditCard className="text-white text-2xl lg:text-3xl" />
+              <div className="w-16 h-16 lg:w-18 lg:h-18 rounded-2xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#B7B89F'}}>
+                <span className="text-2xl lg:text-3xl">💳</span>
               </div>
             </div>
           </div>
           
-          <div className="bg-gradient-to-br from-white to-purple-50 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 lg:p-10 border border-purple-100 sm:col-span-2 lg:col-span-1">
+          <div className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-8 lg:p-10 border sm:col-span-2 lg:col-span-1" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm lg:text-base font-medium text-gray-600 mb-2">Total Savings</p>
-                <p className="text-2xl lg:text-4xl font-bold text-purple-600">₹{totalSavings.toLocaleString()}</p>
+                <p className="text-sm lg:text-base font-medium mb-2" style={{color: '#777C6D'}}>Total Savings</p>
+                <p className="text-2xl lg:text-4xl font-bold text-blue-600">₹{totalSavings.toLocaleString()}</p>
               </div>
-              <div className="w-16 h-16 lg:w-18 lg:h-18 bg-gradient-to-br from-purple-400 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <LuUser className="text-white text-2xl lg:text-3xl" />
+              <div className="w-16 h-16 lg:w-18 lg:h-18 rounded-2xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#B7B89F'}}>
+                <span className="text-2xl lg:text-3xl">💾</span>
               </div>
             </div>
           </div>
@@ -276,19 +276,16 @@ function Home() {
         {/* Charts Row */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mt-12">
           {/* Bar Chart */}
-          <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border border-gray-100">
+          <div className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border" style={{backgroundColor: '#EEEEEE', borderColor: '#CBCBCB'}}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-              <h3 className="text-base lg:text-lg font-semibold text-gray-900">Top 5 Expense Categories</h3>
-              <div className="flex bg-gray-100 rounded-xl p-1.5 shadow-inner">
+              <h3 className="text-base lg:text-lg font-semibold" style={{color: '#777C6D'}}>Top 5 Expense Categories</h3>
+              <div className="flex rounded-xl p-1.5 shadow-inner" style={{backgroundColor: '#CBCBCB'}}>
                 {timePeriodOptions.map((option) => (
                   <button
                     key={option.value}
                     onClick={() => setCategoryPeriod(option.value)}
-                    className={`px-4 py-2 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-300 ${
-                      categoryPeriod === option.value
-                        ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg transform scale-105'
-                        : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50 hover:shadow-md'
-                    }`}
+                    className={`px-4 py-2 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-300`}
+                    style={categoryPeriod === option.value ? {backgroundColor: '#777C6D', color: '#EEEEEE'} : {color: '#777C6D'}}
                   >
                     {option.label}
                   </button>
@@ -306,26 +303,23 @@ function Home() {
                 </BarChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex items-center justify-center h-48 lg:h-64 text-gray-500 text-sm">
+              <div className="flex items-center justify-center h-48 lg:h-64 text-sm" style={{color: '#777C6D'}}>
                 No expense data available
               </div>
             )}
           </div>
 
           {/* Pie Chart */}
-          <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border border-gray-100">
+          <div className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border" style={{backgroundColor: '#EEEEEE', borderColor: '#CBCBCB'}}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-              <h3 className="text-base lg:text-lg font-semibold text-gray-900">Financial Overview</h3>
-              <div className="flex bg-gray-100 rounded-xl p-1.5 shadow-inner">
+              <h3 className="text-base lg:text-lg font-semibold" style={{color: '#777C6D'}}>Financial Overview</h3>
+              <div className="flex rounded-xl p-1.5 shadow-inner" style={{backgroundColor: '#CBCBCB'}}>
                 {timePeriodOptions.map((option) => (
                   <button
                     key={option.value}
                     onClick={() => setOverviewPeriod(option.value)}
-                    className={`px-4 py-2 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-300 ${
-                      overviewPeriod === option.value
-                        ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg transform scale-105'
-                        : 'text-gray-600 hover:text-green-600 hover:bg-green-50 hover:shadow-md'
-                    }`}
+                    className={`px-4 py-2 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-300`}
+                    style={overviewPeriod === option.value ? {backgroundColor: '#777C6D', color: '#EEEEEE'} : {color: '#777C6D'}}
                   >
                     {option.label}
                   </button>
@@ -353,7 +347,7 @@ function Home() {
                 </PieChart>
               </ResponsiveContainer>
             ) : (
-              <div className="flex items-center justify-center h-48 lg:h-64 text-gray-500 text-sm">
+              <div className="flex items-center justify-center h-48 lg:h-64 text-sm" style={{color: '#777C6D'}}>
                 No financial data available
               </div>
             )}
@@ -363,19 +357,16 @@ function Home() {
         {/* Bottom Row */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
           {/* Line Chart */}
-          <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border border-gray-100">
+          <div className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border" style={{backgroundColor: '#EEEEEE', borderColor: '#CBCBCB'}}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-              <h3 className="text-base lg:text-lg font-semibold text-gray-900">Expense Activity</h3>
-              <div className="flex bg-gray-100 rounded-xl p-1.5 shadow-inner">
+              <h3 className="text-base lg:text-lg font-semibold" style={{color: '#777C6D'}}>Expense Activity</h3>
+              <div className="flex rounded-xl p-1.5 shadow-inner" style={{backgroundColor: '#CBCBCB'}}>
                 {timePeriodOptions.map((option) => (
                   <button
                     key={option.value}
                     onClick={() => setTimePeriod(option.value)}
-                    className={`px-4 py-2 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-300 ${
-                      timePeriod === option.value
-                        ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg transform scale-105'
-                        : 'text-gray-600 hover:text-red-600 hover:bg-red-50 hover:shadow-md'
-                    }`}
+                    className={`px-4 py-2 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-300`}
+                    style={timePeriod === option.value ? {backgroundColor: '#777C6D', color: '#EEEEEE'} : {color: '#777C6D'}}
                   >
                     {option.label}
                   </button>
@@ -388,13 +379,13 @@ function Home() {
                 <XAxis 
                   dataKey="period" 
                   fontSize={12} 
-                  tick={{ fill: '#6b7280' }}
-                  axisLine={{ stroke: '#e5e7eb' }}
+                  tick={{ fill: '#777C6D' }}
+                  axisLine={{ stroke: '#B7B89F' }}
                 />
                 <YAxis 
                   fontSize={12} 
-                  tick={{ fill: '#6b7280' }}
-                  axisLine={{ stroke: '#e5e7eb' }}
+                  tick={{ fill: '#777C6D' }}
+                  axisLine={{ stroke: '#B7B89F' }}
                 />
                 <Tooltip 
                   formatter={(value) => [`₹${value.toLocaleString()}`, 'Amount']} 
@@ -420,19 +411,16 @@ function Home() {
           </div>
 
           {/* Recent Expenses */}
-          <div className="bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border border-gray-100">
+          <div className="rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 p-6 lg:p-8 border" style={{backgroundColor: '#EEEEEE', borderColor: '#CBCBCB'}}>
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-              <h3 className="text-base lg:text-lg font-semibold text-gray-900">Recent Expenses</h3>
-              <div className="flex bg-gray-100 rounded-xl p-1.5 shadow-inner">
+              <h3 className="text-base lg:text-lg font-semibold" style={{color: '#777C6D'}}>Recent Expenses</h3>
+              <div className="flex rounded-xl p-1.5 shadow-inner" style={{backgroundColor: '#CBCBCB'}}>
                 {[{value: 'recent', label: 'Recent'}, {value: 'highest', label: 'Highest'}, {value: 'lowest', label: 'Lowest'}].map((option) => (
                   <button
                     key={option.value}
                     onClick={() => setSortOrder(option.value)}
-                    className={`px-4 py-2 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-300 ${
-                      sortOrder === option.value
-                        ? 'bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-lg transform scale-105'
-                        : 'text-gray-600 hover:text-purple-600 hover:bg-purple-50 hover:shadow-md'
-                    }`}
+                    className={`px-4 py-2 text-xs lg:text-sm font-semibold rounded-lg transition-all duration-300`}
+                    style={sortOrder === option.value ? {backgroundColor: '#777C6D', color: '#EEEEEE'} : {color: '#777C6D'}}
                   >
                     {option.label}
                   </button>
@@ -442,17 +430,17 @@ function Home() {
             {recentExpenses.length > 0 ? (
               <div className="space-y-3 lg:space-y-4 max-h-48 lg:max-h-64 overflow-y-auto">
                 {recentExpenses.map((expense, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 lg:p-5 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl hover:shadow-md transition-all duration-200 border border-gray-200">
+                  <div key={index} className="flex items-center justify-between p-4 lg:p-5 rounded-xl hover:shadow-md transition-all duration-200 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
                     <div className="flex-1 min-w-0">
-                      <p className="font-medium text-gray-900 text-sm lg:text-base truncate">{expense.name}</p>
-                      <p className="text-xs lg:text-sm text-gray-500">{expense.date}</p>
+                      <p className="font-medium text-sm lg:text-base truncate" style={{color: '#777C6D'}}>{expense.name}</p>
+                      <p className="text-xs lg:text-sm" style={{color: '#777C6D', opacity: 0.7}}>{expense.date}</p>
                     </div>
                     <p className="font-semibold text-red-600 text-sm lg:text-base ml-2">{expense.amount}</p>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-6 lg:py-8 text-gray-500 text-sm">
+              <div className="text-center py-6 lg:py-8 text-sm" style={{color: '#777C6D'}}>
                 No recent expenses found
               </div>
             )}
