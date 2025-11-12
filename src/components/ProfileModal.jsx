@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { LuUser, LuMail, LuCamera, LuSettings, LuLogOut, LuUsers, LuPlus, LuTrash2 } from 'react-icons/lu';
+import { LuUser, LuMail, LuCamera, LuSettings, LuLogOut, LuUsers, LuPlus, LuTrash2, LuX, LuBell, LuShield, LuInfo } from 'react-icons/lu';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import AddAccountModal from './AddAccountModal';
@@ -106,7 +106,7 @@ function ProfileModal({ isOpen, onClose, user }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
       <div className="rounded-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl" style={{backgroundColor: '#EEEEEE'}}>
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b" style={{borderColor: '#CBCBCB'}}>
@@ -116,7 +116,7 @@ function ProfileModal({ isOpen, onClose, user }) {
             className="p-2 rounded-full transition-colors"
             style={{color: '#777C6D'}}
           >
-            ✕
+            <LuX className="w-5 h-5" />
           </button>
         </div>
         
@@ -161,12 +161,13 @@ function ProfileModal({ isOpen, onClose, user }) {
         {/* Profile Information */}
         <div className="p-6 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-lg font-semibold text-gray-900">Personal Information</h3>
+            <h3 className="text-lg font-semibold" style={{color: '#777C6D'}}>Personal Information</h3>
             <button
               onClick={() => setEditMode(!editMode)}
-              className="flex items-center space-x-1 text-purple-600 hover:text-purple-700 text-sm font-medium"
+              className="flex items-center space-x-1 text-sm font-medium"
+              style={{color: '#777C6D'}}
             >
-              <span className="w-4 h-4 flex items-center justify-center text-sm">✏️</span>
+              <LuSettings className="w-4 h-4" />
               <span>{editMode ? 'Cancel' : 'Edit'}</span>
             </button>
           </div>
@@ -174,46 +175,49 @@ function ProfileModal({ isOpen, onClose, user }) {
           {editMode ? (
             <div className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                <label className="block text-sm font-medium mb-1" style={{color: '#777C6D'}}>Full Name</label>
                 <input
                   type="text"
                   value={formData.fullName}
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F', color: '#777C6D'}}
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium mb-1" style={{color: '#777C6D'}}>Email</label>
                 <input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F', color: '#777C6D'}}
                 />
               </div>
               <button
                 onClick={handleSaveProfile}
                 disabled={saving}
-                className="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50"
+                className="w-full py-2 rounded-lg transition-colors disabled:opacity-50"
+                style={{backgroundColor: '#777C6D', color: '#EEEEEE'}}
               >
                 {saving ? 'Saving...' : 'Save Changes'}
               </button>
             </div>
           ) : (
             <div className="space-y-3">
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <LuUser className="w-5 h-5 text-purple-600" />
+              <div className="flex items-center space-x-3 p-3 rounded-lg" style={{backgroundColor: '#CBCBCB'}}>
+                <LuUser className="w-5 h-5" style={{color: '#777C6D'}} />
                 <div>
-                  <p className="text-sm text-gray-500">Full Name</p>
-                  <p className="font-medium text-gray-900">{user?.fullName}</p>
+                  <p className="text-sm" style={{color: '#777C6D', opacity: 0.7}}>Full Name</p>
+                  <p className="font-medium" style={{color: '#777C6D'}}>{user?.fullName}</p>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <LuMail className="w-5 h-5 text-purple-600" />
+              <div className="flex items-center space-x-3 p-3 rounded-lg" style={{backgroundColor: '#CBCBCB'}}>
+                <LuMail className="w-5 h-5" style={{color: '#777C6D'}} />
                 <div>
-                  <p className="text-sm text-gray-500">Email</p>
-                  <p className="font-medium text-gray-900">{user?.email}</p>
+                  <p className="text-sm" style={{color: '#777C6D', opacity: 0.7}}>Email</p>
+                  <p className="font-medium" style={{color: '#777C6D'}}>{user?.email}</p>
                 </div>
               </div>
             </div>
@@ -289,73 +293,74 @@ function ProfileModal({ isOpen, onClose, user }) {
         )}
 
         {/* Current Account Data */}
-        <div className="p-6 border-t border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Current Account</h3>
-          <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-4">
+        <div className="p-6 border-t" style={{borderColor: '#CBCBCB'}}>
+          <h3 className="text-lg font-semibold mb-4" style={{color: '#777C6D'}}>Current Account</h3>
+          <div className="rounded-lg p-4" style={{backgroundColor: '#B7B89F'}}>
             <div className="flex items-center space-x-3 mb-3">
               {user?.profileImageUrl ? (
                 <img src={user.profileImageUrl} alt="Profile" className="w-10 h-10 rounded-full object-cover" />
               ) : (
-                <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style={{backgroundColor: '#777C6D'}}>
                   {user?.fullName?.charAt(0)?.toUpperCase()}
                 </div>
               )}
               <div>
-                <p className="font-semibold text-gray-900">{user?.fullName}</p>
-                <p className="text-sm text-gray-600">{user?.email}</p>
+                <p className="font-semibold" style={{color: '#777C6D'}}>{user?.fullName}</p>
+                <p className="text-sm" style={{color: '#777C6D', opacity: 0.8}}>{user?.email}</p>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3 text-center">
-              <div className="bg-white p-2 rounded">
-                <p className="text-lg font-bold text-purple-600">{stats.totalTransactions}</p>
-                <p className="text-xs text-gray-500">Transactions</p>
+              <div className="p-2 rounded" style={{backgroundColor: '#EEEEEE'}}>
+                <p className="text-lg font-bold" style={{color: '#777C6D'}}>{stats.totalTransactions}</p>
+                <p className="text-xs" style={{color: '#777C6D', opacity: 0.7}}>Transactions</p>
               </div>
-              <div className="bg-white p-2 rounded">
+              <div className="p-2 rounded" style={{backgroundColor: '#EEEEEE'}}>
                 <p className={`text-lg font-bold ${stats.totalSavings >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                   ₹{Math.abs(stats.totalSavings).toLocaleString()}
                 </p>
-                <p className="text-xs text-gray-500">{stats.totalSavings >= 0 ? 'Savings' : 'Loss'}</p>
+                <p className="text-xs" style={{color: '#777C6D', opacity: 0.7}}>{stats.totalSavings >= 0 ? 'Savings' : 'Loss'}</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Settings Options */}
-        <div className="p-6 border-t border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Settings</h3>
+        <div className="p-6 border-t" style={{borderColor: '#CBCBCB'}}>
+          <h3 className="text-lg font-semibold mb-4" style={{color: '#777C6D'}}>Settings</h3>
           <div className="space-y-2">
             <button 
               onClick={() => setShowAddAccountModal(true)}
-              className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+              className="w-full flex items-center space-x-3 p-3 text-left rounded-lg transition-colors"
+              style={{color: '#777C6D'}}
             >
-              <LuSettings className="w-5 h-5 text-gray-600" />
+              <LuSettings className="w-5 h-5" />
               <div>
-                <p className="font-medium text-gray-900">Account Settings</p>
-                <p className="text-sm text-gray-500">Add or manage multiple accounts</p>
+                <p className="font-medium">Account Settings</p>
+                <p className="text-sm" style={{opacity: 0.7}}>Add or manage multiple accounts</p>
               </div>
             </button>
             
-            <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
-              <span className="w-5 h-5 text-gray-600 flex items-center justify-center">🔔</span>
+            <button className="w-full flex items-center space-x-3 p-3 text-left rounded-lg transition-colors" style={{color: '#777C6D'}}>
+              <LuBell className="w-5 h-5" />
               <div>
-                <p className="font-medium text-gray-900">Notifications</p>
-                <p className="text-sm text-gray-500">Configure notification preferences</p>
+                <p className="font-medium">Notifications</p>
+                <p className="text-sm" style={{opacity: 0.7}}>Configure notification preferences</p>
               </div>
             </button>
             
-            <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
-              <span className="w-5 h-5 text-gray-600 flex items-center justify-center">🛡️</span>
+            <button className="w-full flex items-center space-x-3 p-3 text-left rounded-lg transition-colors" style={{color: '#777C6D'}}>
+              <LuShield className="w-5 h-5" />
               <div>
-                <p className="font-medium text-gray-900">Privacy & Security</p>
-                <p className="text-sm text-gray-500">Manage your privacy settings</p>
+                <p className="font-medium">Privacy & Security</p>
+                <p className="text-sm" style={{opacity: 0.7}}>Manage your privacy settings</p>
               </div>
             </button>
             
-            <button className="w-full flex items-center space-x-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors">
-              <span className="w-5 h-5 text-gray-600 flex items-center justify-center">❓</span>
+            <button className="w-full flex items-center space-x-3 p-3 text-left rounded-lg transition-colors" style={{color: '#777C6D'}}>
+              <LuInfo className="w-5 h-5" />
               <div>
-                <p className="font-medium text-gray-900">Help & Support</p>
-                <p className="text-sm text-gray-500">Get help and contact support</p>
+                <p className="font-medium">Help & Support</p>
+                <p className="text-sm" style={{opacity: 0.7}}>Get help and contact support</p>
               </div>
             </button>
             
@@ -366,7 +371,7 @@ function ProfileModal({ isOpen, onClose, user }) {
                 navigate('/login');
                 onClose();
               }}
-              className="w-full flex items-center space-x-3 p-3 text-left hover:bg-red-50 rounded-lg transition-colors text-red-600"
+              className="w-full flex items-center space-x-3 p-3 text-left rounded-lg transition-colors text-red-600"
             >
               <LuLogOut className="w-5 h-5" />
               <div>

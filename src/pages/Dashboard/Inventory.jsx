@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import DashboardLayout from '../../components/layouts/DashboardLayout'
-import { LuUser, LuPlus, LuSearch, LuFilter, LuTrash2 } from 'react-icons/lu'
+import { LuUser, LuPlus, LuSearch, LuFilter, LuTrash2, LuPackage, LuSettings } from 'react-icons/lu'
 import api from '../../utils/api'
 import toast from 'react-hot-toast'
 
 function Inventory() {
   const [showForm, setShowForm] = useState(false)
+  const [editingItem, setEditingItem] = useState(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterCategory, setFilterCategory] = useState('all')
   const [items, setItems] = useState([])
@@ -39,10 +40,10 @@ function Inventory() {
   
   const getStatusColor = (status) => {
     switch (status) {
-      case 'In Stock': return 'bg-green-900/30 text-green-400'
-      case 'Low Stock': return 'bg-yellow-900/30 text-yellow-400'
-      case 'Out of Stock': return 'bg-red-900/30 text-red-400'
-      default: return 'bg-gray-700 text-gray-300'
+      case 'In Stock': return 'text-white'
+      case 'Low Stock': return 'text-white'
+      case 'Out of Stock': return 'text-white'
+      default: return 'text-white'
     }
   }
 
@@ -57,18 +58,38 @@ function Inventory() {
     setLoading(true)
     
     try {
-      const response = await api.post('/inventory/add', formData)
-      if (response.data.success) {
-        toast.success('Item added successfully!')
-        setFormData({ name: '', category: '', quantity: '', price: '', description: '' })
-        setShowForm(false)
-        fetchItems()
+      if (editingItem) {
+        const response = await api.put(`/inventory/${editingItem._id}`, formData)
+        if (response.data.success) {
+          toast.success('Item updated successfully!')
+          setEditingItem(null)
+        }
+      } else {
+        const response = await api.post('/inventory/add', formData)
+        if (response.data.success) {
+          toast.success('Item added successfully!')
+        }
       }
+      setFormData({ name: '', category: '', quantity: '', price: '', description: '' })
+      setShowForm(false)
+      fetchItems()
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Error adding item')
+      toast.error(error.response?.data?.message || `Error ${editingItem ? 'updating' : 'adding'} item`)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleEdit = (item) => {
+    setEditingItem(item)
+    setFormData({
+      name: item.name,
+      category: item.category,
+      quantity: item.quantity.toString(),
+      price: item.price.toString(),
+      description: item.description || ''
+    })
+    setShowForm(true)
   }
 
   const handleDelete = async (id) => {
@@ -113,7 +134,7 @@ function Inventory() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-lg lg:text-xl">📦</span>
+                <LuPackage className="text-white text-lg lg:text-xl" />
               </div>
               <div>
                 <h2 className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>Inventory Management</h2>
@@ -135,19 +156,19 @@ function Inventory() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
           <div className="rounded-xl shadow-lg p-4 lg:p-6 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <h3 className="text-xs lg:text-sm font-medium mb-1" style={{color: '#777C6D'}}>Total Items</h3>
-            <p className="text-xl lg:text-2xl font-bold text-blue-600">{items.length}</p>
+            <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>{items.length}</p>
           </div>
           <div className="rounded-xl shadow-lg p-4 lg:p-6 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <h3 className="text-xs lg:text-sm font-medium mb-1" style={{color: '#777C6D'}}>Total Value</h3>
-            <p className="text-xl lg:text-2xl font-bold text-green-600">₹{totalValue.toLocaleString()}</p>
+            <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>₹{totalValue.toLocaleString()}</p>
           </div>
           <div className="rounded-xl shadow-lg p-4 lg:p-6 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <h3 className="text-xs lg:text-sm font-medium mb-1" style={{color: '#777C6D'}}>Low Stock</h3>
-            <p className="text-xl lg:text-2xl font-bold text-yellow-600">{lowStockItems}</p>
+            <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>{lowStockItems}</p>
           </div>
           <div className="rounded-xl shadow-lg p-4 lg:p-6 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <h3 className="text-xs lg:text-sm font-medium mb-1" style={{color: '#777C6D'}}>Out of Stock</h3>
-            <p className="text-xl lg:text-2xl font-bold text-red-600">{outOfStockItems}</p>
+            <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>{outOfStockItems}</p>
           </div>
         </div>
 
@@ -205,7 +226,7 @@ function Inventory() {
                     <td colSpan="6" className="px-4 lg:px-6 py-12 text-center">
                       <div style={{color: '#777C6D'}}>
                         <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{backgroundColor: '#B7B89F'}}>
-                          <span className="text-2xl">📦</span>
+                          <LuPackage className="text-white text-2xl" />
                         </div>
                         <p>No inventory items found</p>
                         <button 
@@ -241,9 +262,16 @@ function Inventory() {
                     </td>
                     <td className="px-4 lg:px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center space-x-2">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(getStatus(item.quantity))}`}>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(getStatus(item.quantity))}`} style={{backgroundColor: '#777C6D'}}>
                           {getStatus(item.quantity)}
                         </span>
+                        <button 
+                          onClick={() => handleEdit(item)}
+                          className="p-1 rounded transition-colors"
+                          style={{color: '#777C6D'}}
+                        >
+                          <LuSettings className="w-4 h-4" />
+                        </button>
                         <button 
                           onClick={() => handleDelete(item._id)}
                           className="p-1 text-red-400 hover:bg-red-900/20 rounded transition-colors"
@@ -262,10 +290,10 @@ function Inventory() {
 
         {/* Add Item Modal */}
         {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="rounded-2xl p-4 lg:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto" style={{backgroundColor: '#EEEEEE'}}>
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold" style={{color: '#777C6D'}}>Add New Item</h3>
+                <h3 className="text-xl font-bold" style={{color: '#777C6D'}}>{editingItem ? 'Edit Item' : 'Add New Item'}</h3>
                 <button 
                   onClick={() => setShowForm(false)}
                   className="p-2 rounded-full transition-colors"
@@ -351,7 +379,11 @@ function Inventory() {
                 <div className="flex space-x-3 pt-4">
                   <button
                     type="button"
-                    onClick={() => setShowForm(false)}
+                    onClick={() => {
+                      setShowForm(false)
+                      setEditingItem(null)
+                      setFormData({ name: '', category: '', quantity: '', price: '', description: '' })
+                    }}
                     className="flex-1 px-4 py-2 border rounded-lg transition-colors"
                     style={{borderColor: '#B7B89F', color: '#777C6D'}}
                   >
@@ -363,7 +395,7 @@ function Inventory() {
                     className="flex-1 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
                     style={{backgroundColor: '#777C6D', color: '#EEEEEE'}}
                   >
-                    {loading ? 'Adding...' : 'Add Item'}
+                    {loading ? (editingItem ? 'Updating...' : 'Adding...') : (editingItem ? 'Update Item' : 'Add Item')}
                   </button>
                 </div>
               </form>

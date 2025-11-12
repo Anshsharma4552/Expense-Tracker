@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import DashboardLayout from '../../components/layouts/DashboardLayout'
-import { LuTrendingUp, LuTrendingDown, LuDollarSign, LuCreditCard, LuCalendar, LuUser } from 'react-icons/lu'
+import { LuTrendingUp, LuTrendingDown, LuDollarSign, LuCreditCard, LuCalendar, LuUser, LuCheck, LuX, LuLightbulb } from 'react-icons/lu'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer, AreaChart, Area } from 'recharts'
 import api from '../../utils/api'
 
@@ -75,7 +75,7 @@ function Reports() {
 
   const monthlyData = getMonthlyData()
   const categoryData = getCategoryBreakdown()
-  const colors = ['#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#3B82F6', '#8B5A2B', '#EC4899']
+  const colors = ['#777C6D', '#B7B89F', '#CBCBCB', '#EEEEEE', '#777C6D', '#B7B89F', '#CBCBCB']
 
   if (loading) {
     return (
@@ -95,7 +95,7 @@ function Reports() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-lg lg:text-xl">📈</span>
+                <LuTrendingUp className="text-white text-lg lg:text-xl" />
               </div>
               <div>
                 <h2 className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>Financial Reports</h2>
@@ -125,10 +125,10 @@ function Reports() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs lg:text-sm font-medium" style={{color: '#777C6D'}}>Total Revenue</p>
-                <p className="text-xl lg:text-2xl font-bold text-green-600">₹{totalIncome.toLocaleString()}</p>
+                <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>₹{totalIncome.toLocaleString()}</p>
               </div>
               <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-lg">💰</span>
+                <LuDollarSign className="text-white text-lg" />
               </div>
             </div>
           </div>
@@ -137,10 +137,10 @@ function Reports() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs lg:text-sm font-medium" style={{color: '#777C6D'}}>Total Expenses</p>
-                <p className="text-xl lg:text-2xl font-bold text-red-600">₹{totalExpense.toLocaleString()}</p>
+                <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>₹{totalExpense.toLocaleString()}</p>
               </div>
               <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-lg">💳</span>
+                <LuCreditCard className="text-white text-lg" />
               </div>
             </div>
           </div>
@@ -149,12 +149,12 @@ function Reports() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs lg:text-sm font-medium" style={{color: '#777C6D'}}>{netProfit >= 0 ? 'Net Profit' : 'Net Loss'}</p>
-                <p className={`text-xl lg:text-2xl font-bold ${netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>
                   ₹{Math.abs(netProfit).toLocaleString()}
                 </p>
               </div>
               <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-lg">{netProfit >= 0 ? '📈' : '📉'}</span>
+                {netProfit >= 0 ? <LuTrendingUp className="text-white text-lg" /> : <LuTrendingDown className="text-white text-lg" />}
               </div>
             </div>
           </div>
@@ -163,12 +163,12 @@ function Reports() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs lg:text-sm font-medium" style={{color: '#777C6D'}}>Profit Margin</p>
-                <p className={`text-xl lg:text-2xl font-bold ${parseFloat(profitMargin) >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>
                   {profitMargin}%
                 </p>
               </div>
               <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-lg">{parseFloat(profitMargin) >= 0 ? '📈' : '📉'}</span>
+                {parseFloat(profitMargin) >= 0 ? <LuTrendingUp className="text-white text-lg" /> : <LuTrendingDown className="text-white text-lg" />}
               </div>
             </div>
           </div>
@@ -183,15 +183,15 @@ function Reports() {
               <div className="space-y-3">
                 <div className="flex justify-between items-center p-3 rounded-lg border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
                   <span className="text-sm font-medium" style={{color: '#777C6D'}}>Revenue</span>
-                  <span className="text-green-600 font-semibold">₹{totalIncome.toLocaleString()}</span>
+                  <span className="font-semibold" style={{color: '#777C6D'}}>₹{totalIncome.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 rounded-lg border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
                   <span className="text-sm font-medium" style={{color: '#777C6D'}}>Expenses</span>
-                  <span className="text-red-600 font-semibold">₹{totalExpense.toLocaleString()}</span>
+                  <span className="font-semibold" style={{color: '#777C6D'}}>₹{totalExpense.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between items-center p-3 rounded-lg border-2" style={{backgroundColor: '#B7B89F', borderColor: '#777C6D'}}>
                   <span className="font-semibold" style={{color: '#777C6D'}}>{netProfit >= 0 ? 'Net Profit' : 'Net Loss'}</span>
-                  <span className={`font-bold text-lg ${netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <span className="font-bold text-lg" style={{color: '#777C6D'}}>
                     ₹{Math.abs(netProfit).toLocaleString()}
                   </span>
                 </div>
@@ -203,18 +203,27 @@ function Reports() {
               <div className="space-y-3 text-sm">
                 {netProfit >= 0 ? (
                   <div className="p-3 rounded-lg border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
-                    <p className="text-green-600 font-medium">✅ You're in profit!</p>
+                    <div className="flex items-center space-x-2">
+                      <LuCheck className="w-4 h-4" style={{color: '#777C6D'}} />
+                      <p className="font-medium" style={{color: '#777C6D'}}>You're in profit!</p>
+                    </div>
                     <p className="mt-1" style={{color: '#777C6D'}}>Your income exceeds expenses by ₹{netProfit.toLocaleString()}</p>
                   </div>
                 ) : (
                   <div className="p-3 rounded-lg border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
-                    <p className="text-red-600 font-medium">⚠️ You're in loss</p>
+                    <div className="flex items-center space-x-2">
+                      <LuX className="w-4 h-4" style={{color: '#777C6D'}} />
+                      <p className="font-medium" style={{color: '#777C6D'}}>You're in loss</p>
+                    </div>
                     <p className="mt-1" style={{color: '#777C6D'}}>Your expenses exceed income by ₹{Math.abs(netProfit).toLocaleString()}</p>
                   </div>
                 )}
                 
                 <div className="p-3 rounded-lg border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
-                  <p className="text-blue-600 font-medium">💡 Recommendation</p>
+                  <div className="flex items-center space-x-2">
+                    <LuLightbulb className="w-4 h-4" style={{color: '#777C6D'}} />
+                    <p className="font-medium" style={{color: '#777C6D'}}>Recommendation</p>
+                  </div>
                   <p className="mt-1" style={{color: '#777C6D'}}>
                     {netProfit >= 0 
                       ? 'Consider investing your surplus or building an emergency fund.' 
@@ -238,9 +247,9 @@ function Reports() {
                   <XAxis dataKey="month" fontSize={12} />
                   <YAxis fontSize={12} />
                   <Tooltip formatter={(value) => [`₹${value.toLocaleString()}`, 'Amount']} />
-                  <Area type="monotone" dataKey="income" stackId="1" stroke="#10B981" fill="#10B981" fillOpacity={0.6} />
-                  <Area type="monotone" dataKey="expense" stackId="2" stroke="#EF4444" fill="#EF4444" fillOpacity={0.6} />
-                  <Line type="monotone" dataKey="profit" stroke="#8B5CF6" strokeWidth={3} />
+                  <Area type="monotone" dataKey="income" stackId="1" stroke="#777C6D" fill="#777C6D" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="expense" stackId="2" stroke="#B7B89F" fill="#B7B89F" fillOpacity={0.6} />
+                  <Line type="monotone" dataKey="profit" stroke="#CBCBCB" strokeWidth={3} />
                 </AreaChart>
               </ResponsiveContainer>
             ) : (

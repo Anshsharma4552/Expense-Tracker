@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import DashboardLayout from '../../components/layouts/DashboardLayout'
-import { LuCreditCard, LuPlus, LuX, LuTrash2 } from 'react-icons/lu'
+import { LuCreditCard, LuPlus, LuX, LuTrash2, LuSettings } from 'react-icons/lu'
 import api from '../../utils/api'
 import toast from 'react-hot-toast'
 
 function Expense() {
   const [showForm, setShowForm] = useState(false)
+  const [editingExpense, setEditingExpense] = useState(null)
   const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
@@ -38,18 +39,38 @@ function Expense() {
     setLoading(true)
     
     try {
-      const response = await api.post('/expense/add', formData)
-      if (response.data.success) {
-        toast.success('Expense added successfully!')
-        setFormData({ title: '', amount: '', category: '', description: '', date: new Date().toISOString().split('T')[0] })
-        setShowForm(false)
-        fetchExpenses()
+      if (editingExpense) {
+        const response = await api.put(`/expense/${editingExpense._id}`, formData)
+        if (response.data.success) {
+          toast.success('Expense updated successfully!')
+          setEditingExpense(null)
+        }
+      } else {
+        const response = await api.post('/expense/add', formData)
+        if (response.data.success) {
+          toast.success('Expense added successfully!')
+        }
       }
+      setFormData({ title: '', amount: '', category: '', description: '', date: new Date().toISOString().split('T')[0] })
+      setShowForm(false)
+      fetchExpenses()
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Error adding expense')
+      toast.error(error.response?.data?.message || `Error ${editingExpense ? 'updating' : 'adding'} expense`)
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleEdit = (expense) => {
+    setEditingExpense(expense)
+    setFormData({
+      title: expense.title,
+      amount: expense.amount.toString(),
+      category: expense.category,
+      description: expense.description || '',
+      date: expense.date.split('T')[0]
+    })
+    setShowForm(true)
   }
 
   const handleDelete = async (id) => {
@@ -75,7 +96,7 @@ function Expense() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-xl flex items-center justify-center" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-lg lg:text-xl">💳</span>
+                <LuCreditCard className="text-white text-lg lg:text-xl" />
               </div>
               <div>
                 <h2 className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>Expense Management</h2>
@@ -96,11 +117,11 @@ function Expense() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
           <div className="rounded-2xl p-4 lg:p-6 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <h3 className="text-xs lg:text-sm font-medium mb-1" style={{color: '#777C6D'}}>Total Expenses</h3>
-            <p className="text-xl lg:text-2xl font-bold text-red-600">₹{totalExpense.toLocaleString()}</p>
+            <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>₹{totalExpense.toLocaleString()}</p>
           </div>
           <div className="rounded-2xl p-4 lg:p-6 border" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <h3 className="text-xs lg:text-sm font-medium mb-1" style={{color: '#777C6D'}}>This Month</h3>
-            <p className="text-xl lg:text-2xl font-bold text-orange-600">₹{totalExpense.toLocaleString()}</p>
+            <p className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>₹{totalExpense.toLocaleString()}</p>
           </div>
           <div className="rounded-2xl p-4 lg:p-6 border sm:col-span-2 lg:col-span-1" style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
             <h3 className="text-xs lg:text-sm font-medium mb-1" style={{color: '#777C6D'}}>Records</h3>
@@ -113,7 +134,7 @@ function Expense() {
           {expenses.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-2xl">💳</span>
+                <LuCreditCard className="text-white text-2xl" />
               </div>
               <p className="mb-4" style={{color: '#777C6D'}}>No expense records found</p>
               <button 
@@ -131,7 +152,7 @@ function Expense() {
                   <div className="flex-1">
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{backgroundColor: '#B7B89F'}}>
-                        <span className="text-lg">💳</span>
+                        <LuCreditCard className="text-white text-lg" />
                       </div>
                       <div>
                         <h4 className="font-medium" style={{color: '#777C6D'}}>{expense.title}</h4>
@@ -141,7 +162,14 @@ function Expense() {
                     </div>
                   </div>
                   <div className="flex items-center space-x-3">
-                    <span className="text-lg font-semibold text-red-600">₹{expense.amount.toLocaleString()}</span>
+                    <span className="text-lg font-semibold" style={{color: '#777C6D'}}>₹{expense.amount.toLocaleString()}</span>
+                    <button 
+                      onClick={() => handleEdit(expense)}
+                      className="p-2 rounded-lg transition-colors"
+                      style={{color: '#777C6D'}}
+                    >
+                      <LuSettings className="w-4 h-4" />
+                    </button>
                     <button 
                       onClick={() => handleDelete(expense._id)}
                       className="p-2 text-red-600 hover:bg-red-100 rounded-lg transition-colors"
@@ -157,10 +185,10 @@ function Expense() {
 
         {/* Add Expense Modal */}
         {showForm && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="rounded-2xl p-4 lg:p-6 w-full max-w-md max-h-[90vh] overflow-y-auto" style={{backgroundColor: '#EEEEEE'}}>
               <div className="flex justify-between items-center mb-6">
-                <h3 className="text-xl font-bold" style={{color: '#777C6D'}}>Add Expense</h3>
+                <h3 className="text-xl font-bold" style={{color: '#777C6D'}}>{editingExpense ? 'Edit Expense' : 'Add Expense'}</h3>
                 <button 
                   onClick={() => setShowForm(false)}
                   className="p-2 rounded-full transition-colors"
@@ -241,7 +269,11 @@ function Expense() {
                 <div className="flex space-x-3 pt-4">
                   <button
                     type="button"
-                    onClick={() => setShowForm(false)}
+                    onClick={() => {
+                      setShowForm(false)
+                      setEditingExpense(null)
+                      setFormData({ title: '', amount: '', category: '', description: '', date: new Date().toISOString().split('T')[0] })
+                    }}
                     className="flex-1 px-4 py-2 border rounded-lg transition-colors"
                     style={{borderColor: '#B7B89F', color: '#777C6D'}}
                   >
@@ -253,7 +285,7 @@ function Expense() {
                     className="flex-1 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
                     style={{backgroundColor: '#777C6D', color: '#EEEEEE'}}
                   >
-                    {loading ? 'Adding...' : 'Add Expense'}
+                    {loading ? (editingExpense ? 'Updating...' : 'Adding...') : (editingExpense ? 'Update Expense' : 'Add Expense')}
                   </button>
                 </div>
               </form>

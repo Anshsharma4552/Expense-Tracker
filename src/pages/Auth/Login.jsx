@@ -48,8 +48,8 @@ function Login() {
   return (
     <AuthLayout>
         <div className='lg:w-[70%] h-3/4 md:h-full flex flex-col justify-center'>
-            <h3 className='text-xl font-semibold text-black'>Welcome Back</h3>
-            <p className='text-xs text-slate-700 mt-[5px] mb-6'>
+            <h3 className='text-xl font-semibold' style={{color: '#777C6D'}}>Welcome Back</h3>
+            <p className='text-xs mt-[5px] mb-6' style={{color: '#777C6D', opacity: 0.8}}>
                 Please enter your details to login
             </p>
             <form onSubmit={handleLogin}>
@@ -68,12 +68,12 @@ function Login() {
                 type="password"
               />
               {error && <p className="text-red-500 text-xs pb-5">{error}</p>}
-              <button type="submit" className='btn-primary' disabled={loading}>
+              <button type="submit" className='w-full py-3 rounded-lg font-medium transition-colors disabled:opacity-50' style={{backgroundColor: '#777C6D', color: '#EEEEEE'}} disabled={loading}>
                 {loading ? 'LOGGING IN...' : 'LOGIN'}
               </button>
-              <p className='text-[13px] text-slate-800 mt-3'>
+              <p className='text-[13px] mt-3' style={{color: '#777C6D'}}>
                 Don't have an account? 
-                <Link to="/signUp" className='font-medium text-primary underline'>Sign Up 
+                <Link to="/signUp" className='font-medium underline' style={{color: '#777C6D'}}>Sign Up 
                 </Link>
               </p>
             </form>

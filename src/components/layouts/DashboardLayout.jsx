@@ -26,6 +26,11 @@ function DashboardLayout({ children }) {
     { path: '/reports', label: 'Reports', icon: LuUser },
   ];
 
+  const getCurrentPageTitle = () => {
+    const currentItem = navItems.find(item => item.path === location.pathname);
+    return currentItem ? currentItem.label : 'Dashboard';
+  };
+
   return (
     <div className="min-h-screen" style={{backgroundColor: '#777C6D'}}>
       {/* Mobile sidebar overlay */}
@@ -101,7 +106,7 @@ function DashboardLayout({ children }) {
                 >
                   <LuMenu className="w-6 h-6" />
                 </button>
-                <h2 className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>Dashboard</h2>
+                <h2 className="text-xl lg:text-2xl font-bold" style={{color: '#777C6D'}}>{getCurrentPageTitle()}</h2>
               </div>
               <button
                 onClick={() => setShowProfileModal(true)}

@@ -8,12 +8,13 @@ function Input({value,onChange,placeholder, label,type}) {
     }
     return (
         <div>
-            <label className='text-[13px] text-slate-800'>{label}</label>
-            <div className='input-box'>
+            <label className='text-[13px] mb-2 block' style={{color: '#777C6D'}}>{label}</label>
+            <div className='flex items-center px-3 py-2 border rounded-lg mb-4' style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F'}}>
                 <input
                     type={type==="password" ? showPassword ? "text" : "password" : type}
                     placeholder={placeholder}
                     className='w-full bg-transparent outline-none'
+                    style={{color: '#777C6D'}}
                     value={value}
                     onChange={(e)=>onChange(e)}
                 />
@@ -22,13 +23,15 @@ function Input({value,onChange,placeholder, label,type}) {
                         {showPassword ? (
                             <FaRegEye
                                 size={22}
-                                className='text-primary cursor-pointer'
+                                className='cursor-pointer'
+                                style={{color: '#777C6D'}}
                                 onClick={()=>toggleShowPassword()}
                             />
                         ) : (
                             <FaRegEyeSlash
                                 size={22}
-                                className='text-slate-400 cursor-pointer'
+                                className='cursor-pointer'
+                                style={{color: '#777C6D', opacity: 0.6}}
                                 onClick={()=>toggleShowPassword()}
                             />
                         )}

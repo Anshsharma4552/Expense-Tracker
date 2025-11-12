@@ -30,11 +30,12 @@ function ProfilePhotoSelector({image,setImage}) {
         className='hidden'
         />
         {!image ?(
-            <div className='w-20 h-20 flex items-center justify-center bg-purple-100 rounded-full relative'>
-                <LuUser className='text-4xl text-primary'/>
+            <div className='w-20 h-20 flex items-center justify-center rounded-full relative' style={{backgroundColor: '#B7B89F'}}>
+                <LuUser className='text-4xl' style={{color: '#777C6D'}}/>
                 <button
                 type="button"
-                className='w-8 h-8 flex items-center justify-center bg-primary text-white rounded-full absolute -bottom-1 -right-1'
+                className='w-8 h-8 flex items-center justify-center text-white rounded-full absolute -bottom-1 -right-1'
+                style={{backgroundColor: '#777C6D'}}
                 onClick={onChooseFile}
                 >
                     <LuUpload/>

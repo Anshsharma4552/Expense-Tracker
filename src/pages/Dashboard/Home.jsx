@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import DashboardLayout from '../../components/layouts/DashboardLayout'
 import { useAuth } from '../../context/AuthContext'
-import { LuDollarSign, LuCreditCard, LuUser } from 'react-icons/lu'
+import { LuDollarSign, LuCreditCard, LuUser, LuPiggyBank } from 'react-icons/lu'
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, PieChart, Pie, Cell, LineChart, Line, ResponsiveContainer } from 'recharts'
 import api from '../../utils/api'
 
@@ -113,9 +113,9 @@ function Home() {
     const periodSavings = periodIncome - periodExpense;
     
     return [
-      { name: 'Income', value: periodIncome, color: '#10B981' },
-      { name: 'Expense', value: periodExpense, color: '#EF4444' },
-      { name: 'Savings', value: periodSavings, color: '#8B5CF6' }
+      { name: 'Income', value: periodIncome, color: '#777C6D' },
+      { name: 'Expense', value: periodExpense, color: '#B7B89F' },
+      { name: 'Savings', value: periodSavings, color: '#CBCBCB' }
     ];
   };
 
@@ -240,10 +240,10 @@ function Home() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm lg:text-base font-medium mb-2" style={{color: '#777C6D'}}>Total Income</p>
-                <p className="text-2xl lg:text-4xl font-bold text-green-600">₹{totalIncome.toLocaleString()}</p>
+                <p className="text-2xl lg:text-4xl font-bold" style={{color: '#777C6D'}}>₹{totalIncome.toLocaleString()}</p>
               </div>
               <div className="w-16 h-16 lg:w-18 lg:h-18 rounded-2xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-2xl lg:text-3xl">💰</span>
+                <LuDollarSign className="text-white text-2xl lg:text-3xl" />
               </div>
             </div>
           </div>
@@ -252,10 +252,10 @@ function Home() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm lg:text-base font-medium mb-2" style={{color: '#777C6D'}}>Total Expense</p>
-                <p className="text-2xl lg:text-4xl font-bold text-red-600">₹{totalExpense.toLocaleString()}</p>
+                <p className="text-2xl lg:text-4xl font-bold" style={{color: '#777C6D'}}>₹{totalExpense.toLocaleString()}</p>
               </div>
               <div className="w-16 h-16 lg:w-18 lg:h-18 rounded-2xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-2xl lg:text-3xl">💳</span>
+                <LuCreditCard className="text-white text-2xl lg:text-3xl" />
               </div>
             </div>
           </div>
@@ -264,10 +264,10 @@ function Home() {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-sm lg:text-base font-medium mb-2" style={{color: '#777C6D'}}>Total Savings</p>
-                <p className="text-2xl lg:text-4xl font-bold text-blue-600">₹{totalSavings.toLocaleString()}</p>
+                <p className="text-2xl lg:text-4xl font-bold" style={{color: '#777C6D'}}>₹{totalSavings.toLocaleString()}</p>
               </div>
               <div className="w-16 h-16 lg:w-18 lg:h-18 rounded-2xl flex items-center justify-center shadow-lg" style={{backgroundColor: '#B7B89F'}}>
-                <span className="text-2xl lg:text-3xl">💾</span>
+                <LuPiggyBank className="text-white text-2xl lg:text-3xl" />
               </div>
             </div>
           </div>
@@ -299,7 +299,7 @@ function Home() {
                   <XAxis dataKey="name" fontSize={12} />
                   <YAxis fontSize={12} />
                   <Tooltip formatter={(value) => [`₹${value.toLocaleString()}`, 'Amount']} />
-                  <Bar dataKey="amount" fill="#8B5CF6" animationDuration={800} animationBegin={0} />
+                  <Bar dataKey="amount" fill="#777C6D" animationDuration={800} animationBegin={0} />
                 </BarChart>
               </ResponsiveContainer>
             ) : (
@@ -399,10 +399,10 @@ function Home() {
                 <Line 
                   type="monotone" 
                   dataKey="amount" 
-                  stroke="#EF4444" 
+                  stroke="#777C6D" 
                   strokeWidth={3}
-                  dot={{ fill: '#EF4444', strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, stroke: '#EF4444', strokeWidth: 2, fill: '#fff' }}
+                  dot={{ fill: '#777C6D', strokeWidth: 2, r: 4 }}
+                  activeDot={{ r: 6, stroke: '#777C6D', strokeWidth: 2, fill: '#fff' }}
                   animationDuration={800}
                   animationBegin={0}
                 />
@@ -435,7 +435,7 @@ function Home() {
                       <p className="font-medium text-sm lg:text-base truncate" style={{color: '#777C6D'}}>{expense.name}</p>
                       <p className="text-xs lg:text-sm" style={{color: '#777C6D', opacity: 0.7}}>{expense.date}</p>
                     </div>
-                    <p className="font-semibold text-red-600 text-sm lg:text-base ml-2">{expense.amount}</p>
+                    <p className="font-semibold text-sm lg:text-base ml-2" style={{color: '#777C6D'}}>{expense.amount}</p>
                   </div>
                 ))}
               </div>

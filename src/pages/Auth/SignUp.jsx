@@ -79,8 +79,8 @@ function SignUp() {
   return (
     <AuthLayout>
       <div className='lg:w-[100%] h-auto md:h-full mt-10 md:mt-0 flex flex-col justify-center'>
-        <h3 className='text-xl font-semibold text-black'>Create an Account</h3>
-        <p className='text-xs text-slate-700 mt-[5px] mb-6'>
+        <h3 className='text-xl font-semibold' style={{color: '#777C6D'}}>Create an Account</h3>
+        <p className='text-xs mt-[5px] mb-6' style={{color: '#777C6D', opacity: 0.8}}>
           Join us today by entering your details below.
         </p>
         <form onSubmit={handleSignUp}>
@@ -111,12 +111,12 @@ function SignUp() {
               </div>
           </div>
             {error && <p className="text-red-500 text-xs pb-5">{error}</p>}
-            <button type="submit" className='btn-primary' disabled={loading}>
+            <button type="submit" className='w-full py-3 rounded-lg font-medium transition-colors disabled:opacity-50' style={{backgroundColor: '#777C6D', color: '#EEEEEE'}} disabled={loading}>
               {loading ? 'CREATING ACCOUNT...' : 'SIGN UP'}
             </button>
-            <p className='text-[13px] text-slate-800 mt-3'>
+            <p className='text-[13px] mt-3' style={{color: '#777C6D'}}>
             Already have an account?
-            <Link to="/login" className='font-medium text-primary underline'>Login
+            <Link to="/login" className='font-medium underline' style={{color: '#777C6D'}}>Login
             </Link>
             </p>
         </form>

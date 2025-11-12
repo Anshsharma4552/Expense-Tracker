@@ -60,32 +60,30 @@ function AddAccountModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl">
+    <div className="fixed inset-0 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto shadow-2xl" style={{backgroundColor: '#EEEEEE'}}>
         {/* Header */}
-        <div className="flex justify-between items-center p-6 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-gray-900">Add Account</h2>
+        <div className="flex justify-between items-center p-6 border-b" style={{borderColor: '#CBCBCB'}}>
+          <h2 className="text-xl font-bold" style={{color: '#777C6D'}}>Add Account</h2>
           <button 
             onClick={onClose}
-            className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500 hover:text-gray-700"
+            className="p-2 rounded-full transition-colors"
+            style={{color: '#777C6D'}}
           >
             <LuX className="w-5 h-5" />
           </button>
         </div>
 
         {/* Mode Toggle */}
-        <div className="p-6 border-b border-gray-200">
-          <div className="flex bg-gray-100 rounded-lg p-1">
+        <div className="p-6 border-b" style={{borderColor: '#CBCBCB'}}>
+          <div className="flex rounded-lg p-1" style={{backgroundColor: '#CBCBCB'}}>
             <button
               onClick={() => {
                 setMode('login');
                 resetForm();
               }}
-              className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 ${
-                mode === 'login'
-                  ? 'bg-purple-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-purple-600'
-              }`}
+              className="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200"
+              style={mode === 'login' ? {backgroundColor: '#777C6D', color: '#EEEEEE'} : {color: '#777C6D'}}
             >
               Login Existing
             </button>
@@ -94,11 +92,8 @@ function AddAccountModal({ isOpen, onClose }) {
                 setMode('signup');
                 resetForm();
               }}
-              className={`flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200 ${
-                mode === 'signup'
-                  ? 'bg-purple-600 text-white shadow-sm'
-                  : 'text-gray-600 hover:text-purple-600'
-              }`}
+              className="flex-1 py-2 px-4 text-sm font-medium rounded-md transition-all duration-200"
+              style={mode === 'signup' ? {backgroundColor: '#777C6D', color: '#EEEEEE'} : {color: '#777C6D'}}
             >
               Create New
             </button>
@@ -110,7 +105,7 @@ function AddAccountModal({ isOpen, onClose }) {
           <form onSubmit={handleSubmit} className="space-y-4">
             {mode === 'signup' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2" style={{color: '#777C6D'}}>
                   <LuUser className="inline w-4 h-4 mr-1" />
                   Full Name
                 </label>
@@ -118,7 +113,8 @@ function AddAccountModal({ isOpen, onClose }) {
                   type="text"
                   value={formData.fullName}
                   onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F', color: '#777C6D'}}
                   placeholder="Enter your full name"
                   required
                 />
@@ -126,7 +122,7 @@ function AddAccountModal({ isOpen, onClose }) {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{color: '#777C6D'}}>
                 <LuMail className="inline w-4 h-4 mr-1" />
                 Email
               </label>
@@ -134,14 +130,15 @@ function AddAccountModal({ isOpen, onClose }) {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F', color: '#777C6D'}}
                 placeholder="Enter your email"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
+              <label className="block text-sm font-medium mb-2" style={{color: '#777C6D'}}>
                 <LuLock className="inline w-4 h-4 mr-1" />
                 Password
               </label>
@@ -149,7 +146,8 @@ function AddAccountModal({ isOpen, onClose }) {
                 type="password"
                 value={formData.password}
                 onChange={(e) => setFormData({...formData, password: e.target.value})}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F', color: '#777C6D'}}
                 placeholder="Enter your password"
                 required
               />
@@ -157,7 +155,7 @@ function AddAccountModal({ isOpen, onClose }) {
 
             {mode === 'signup' && (
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
+                <label className="block text-sm font-medium mb-2" style={{color: '#777C6D'}}>
                   <LuLock className="inline w-4 h-4 mr-1" />
                   Confirm Password
                 </label>
@@ -165,7 +163,8 @@ function AddAccountModal({ isOpen, onClose }) {
                   type="password"
                   value={formData.confirmPassword}
                   onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                  className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  style={{backgroundColor: '#CBCBCB', borderColor: '#B7B89F', color: '#777C6D'}}
                   placeholder="Confirm your password"
                   required
                 />
@@ -176,14 +175,16 @@ function AddAccountModal({ isOpen, onClose }) {
               <button
                 type="button"
                 onClick={onClose}
-                className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                className="flex-1 px-4 py-2 border rounded-lg transition-colors"
+                style={{borderColor: '#B7B89F', color: '#777C6D'}}
               >
                 Cancel
               </button>
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+                className="flex-1 px-4 py-2 rounded-lg transition-colors disabled:opacity-50 flex items-center justify-center space-x-2"
+                style={{backgroundColor: '#777C6D', color: '#EEEEEE'}}
               >
                 {loading ? (
                   <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -199,9 +200,9 @@ function AddAccountModal({ isOpen, onClose }) {
         </div>
 
         {/* Info */}
-        <div className="p-6 bg-gray-50 rounded-b-2xl">
+        <div className="p-6 rounded-b-2xl" style={{backgroundColor: '#CBCBCB'}}>
           <div className="text-center">
-            <p className="text-sm text-gray-600">
+            <p className="text-sm" style={{color: '#777C6D'}}>
               {mode === 'login' 
                 ? 'Login to an existing account to add it to your account list'
                 : 'Create a new account and it will be automatically added to your account list'
