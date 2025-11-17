@@ -4,9 +4,12 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 function AddAccountModal({ isOpen, onClose }) {
-  const { login, register } = useAuth();
+  const { login, register, switchAccount, currentAccountId } = useAuth();
   const [mode, setMode] = useState('login'); // 'login' or 'signup'
   const [loading, setLoading] = useState(false);
+  const [showSwitchConfirm, setShowSwitchConfirm] = useState(false);
+  const [newAccountData, setNewAccountData] = useState(null);
+  const [previousAccountId, setPreviousAccountId] = useState(null);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -24,9 +27,9 @@ function AddAccountModal({ isOpen, onClose }) {
       if (mode === 'login') {
         const result = await login(formData.email, formData.password);
         if (result.success) {
-          toast.success('Account added successfully!');
-          onClose();
-          setFormData({ fullName: '', email: '', password: '', confirmPassword: '' });
+          setPreviousAccountId(currentAccountId);
+          setNewAccountData({ name: formData.email, id: result.user?.id });
+          setShowSwitchConfirm(true);
         } else {
           toast.error(result.message);
         }
@@ -41,9 +44,9 @@ function AddAccountModal({ isOpen, onClose }) {
           password: formData.password
         });
         if (result.success) {
-          toast.success('New account created and added!');
-          onClose();
-          setFormData({ fullName: '', email: '', password: '', confirmPassword: '' });
+          setPreviousAccountId(currentAccountId);
+          setNewAccountData({ name: formData.fullName, id: result.user?.id });
+          setShowSwitchConfirm(true);
         } else {
           toast.error(result.message);
         }
@@ -56,6 +59,23 @@ function AddAccountModal({ isOpen, onClose }) {
   };
 
   const resetForm = () => {
+    setFormData({ fullName: '', email: '', password: '', confirmPassword: '' });
+  };
+
+  const handleSwitchToNew = () => {
+    toast.success(`Switched to ${newAccountData.name}`);
+    setShowSwitchConfirm(false);
+    onClose();
+    setFormData({ fullName: '', email: '', password: '', confirmPassword: '' });
+  };
+
+  const handleStayWithCurrent = () => {
+    if (previousAccountId) {
+      switchAccount(previousAccountId);
+      toast.success('Staying with previous account');
+    }
+    setShowSwitchConfirm(false);
+    onClose();
     setFormData({ fullName: '', email: '', password: '', confirmPassword: '' });
   };
 
@@ -198,6 +218,32 @@ function AddAccountModal({ isOpen, onClose }) {
             </div>
           </form>
         </div>
+
+        {/* Switch Confirmation */}
+        {showSwitchConfirm && (
+          <div className="absolute inset-0 backdrop-blur-sm flex items-center justify-center z-10">
+            <div className="rounded-xl p-6 m-4 shadow-2xl" style={{backgroundColor: '#EEEEEE'}}>
+              <h3 className="text-lg font-bold mb-4" style={{color: '#777C6D'}}>Account Added Successfully!</h3>
+              <p className="text-sm mb-6" style={{color: '#777C6D'}}>Would you like to switch to the new account or stay with your current account?</p>
+              <div className="flex space-x-3">
+                <button
+                  onClick={handleStayWithCurrent}
+                  className="flex-1 px-4 py-2 border rounded-lg transition-colors"
+                  style={{borderColor: '#B7B89F', color: '#777C6D'}}
+                >
+                  Stay with Current
+                </button>
+                <button
+                  onClick={handleSwitchToNew}
+                  className="flex-1 px-4 py-2 rounded-lg transition-colors"
+                  style={{backgroundColor: '#777C6D', color: '#EEEEEE'}}
+                >
+                  Switch to New
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Info */}
         <div className="p-6 rounded-b-2xl" style={{backgroundColor: '#CBCBCB'}}>
