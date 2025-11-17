@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://your-render-app-name.onrender.com/api/v1',
+  // Replace with your actual Render URL: https://your-service-name.onrender.com/api/v1
+  baseURL: 'http://localhost:8000/api/v1',
   headers: {
     'Content-Type': 'application/json',
   },
